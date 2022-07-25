@@ -1,6 +1,7 @@
 use std::fs;
 
 fn main() {
-    let contents: String = fs::read_to_string("test_file").expect("unable to read file");
+    let file_path = "test_file";
+    let contents: String = fs::read_to_string(file_path).expect("unable to read file");
     println!("{}", contents);
 }
