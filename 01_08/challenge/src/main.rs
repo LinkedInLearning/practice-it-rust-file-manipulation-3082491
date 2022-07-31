@@ -1,4 +1,4 @@
 fn main() {
-    let file_name = "my_file";
+    let file_path = "my_file";
     let contents = "This is my new file! Congrats!!!".to_string();
 }
