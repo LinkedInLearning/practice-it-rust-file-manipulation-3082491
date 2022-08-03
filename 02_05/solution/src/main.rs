@@ -7,6 +7,6 @@ fn read_file(path: &str) -> String {
 fn main() {
     let file_path = "test_file";
 
-    let contents = read_file(&file_path);
+    let contents = read_file(file_path);
     println!("{}", contents);
 }
