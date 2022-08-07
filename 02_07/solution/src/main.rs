@@ -7,7 +7,7 @@ fn read_file(path: &str) -> Result<String, std::io::Error> {
 
 fn main() {
     let file_path = "test_file";
-    
+
     let contents = read_file(&file_path).expect(&format!("unable to read file <{}>", file_path));
     println!("{}", contents);
 }
