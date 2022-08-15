@@ -19,7 +19,7 @@ fn read_file(path: &str) -> Result<Vec<Vec<String>>, std::io::Error> {
 fn main() {
     let file_path = "file_with_lines";
 
-    let lines = read_file(&file_path).expect(&format!("Unable to read file <{}>", &file_path));
+    let lines = read_file(file_path).expect(&format!("Unable to read file <{}>", &file_path));
 
     println!("{:?}", lines);
 }

@@ -2,16 +2,17 @@ use std::collections::HashMap;
 use std::fs;
 
 fn read_file(path: &str) -> Result<Vec<Vec<String>>, std::io::Error> {
-    let mut result = Vec::new();
     let contents = fs::read_to_string(path)?;
-    for line in contents.lines() {
-        let mut words = Vec::new();
-        for word in line.split_whitespace() {
-            words.push(word.to_string());
-        }
-        result.push(words);
-    }
-    Ok(result)
+
+    let lines: Vec<Vec<String>> = contents
+        .lines()
+        .map(|line| {
+            line.split_whitespace()
+                .map(|word| word.to_string())
+                .collect()
+        })
+        .collect();
+    Ok(lines)
 }
 
 fn word_count(lines: &Vec<Vec<String>>) -> HashMap<String, i32> {
@@ -30,37 +31,33 @@ fn replace_x_with_y_in_place(
     mut lines: Vec<Vec<String>>,
     replace_map: &HashMap<String, String>,
 ) -> Vec<Vec<String>> {
-    for line_index in 0..lines.len() {
-        for index in 0..lines[line_index].len() {
-            let word = &lines[line_index][index];
-
-            if let Some(value) = replace_map.get(word) {
-                lines[line_index][index] = value.to_string();
+    for line in lines.iter_mut() {
+        for word in line.iter_mut() {
+            if let Some(new_word) = replace_map.get(word) {
+                *word = new_word.to_string()
             }
         }
     }
-
     lines
 }
 
-fn build_sentences(lines: &Vec<Vec<String>>) -> Vec<String> {
-    let mut result = Vec::new();
-    for line in lines {
-        let sentence: String = line.join(" ");
-        result.push(sentence);
+fn build_lines(old_lines: &Vec<Vec<String>>) -> Vec<String> {
+    let mut new_lines = Vec::new();
+    for line in old_lines {
+        let sentences: String = line.join(" ");
+        new_lines.push(sentences);
     }
-
-    result
+    new_lines
 }
 
-fn write_sentences_to_file(path: &str, sentences: &Vec<String>) -> Result<(), std::io::Error> {
-    let text: String = sentences.iter().map(|line| format!("{}\n", line)).collect();
+fn write_lines_to_file(path: &str, lines: &Vec<String>) -> Result<(), std::io::Error> {
+    let text: String = lines.join("\n");
     fs::write(path, text)?;
     Ok(())
 }
 
 fn main() {
-    let replace_map = HashMap::from([
+    let replacement_map = HashMap::from([
         ("herself".to_string(), "himself".to_string()),
         ("herself,".to_string(), "himself,".to_string()),
         ("her.".to_string(), "him.".to_string()),
@@ -82,19 +79,21 @@ fn main() {
         ("girl".to_string(), "boy".to_string()),
     ]);
 
-    let content = read_file("alice_chapter_1").unwrap();
-    println!("{:?}\n\n", content);
+    // Format data
+    let file_path = "alice_chapter_1";
+    let lines = read_file(file_path).expect(&format!("Error reading file <{}>", &file_path));
 
-    let content = replace_x_with_y_in_place(content, &replace_map);
+    // Manipulate data
+    let new_lines = replace_x_with_y_in_place(lines, &replacement_map);
 
-    let counter = word_count(&content);
-
+    // Used for Discovery
+    let counter = word_count(&new_lines);
     println!("{:#?}\n\n", counter);
 
-    let sentences = build_sentences(&content);
+    // Reconstruct data
+    let vec_of_lines = build_lines(&new_lines);
 
-    println!("{:#?}", sentences);
-
+    // Write data to file
     let path = "marcus_chapter_1";
-    write_sentences_to_file(&path, &sentences).unwrap()
+    write_lines_to_file(path, &vec_of_lines).unwrap()
 }
