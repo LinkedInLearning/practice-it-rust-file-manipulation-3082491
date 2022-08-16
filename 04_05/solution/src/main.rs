@@ -8,10 +8,10 @@ fn get_words(text: &str) -> Vec<String> {
 
 fn replace_x_with_y_in_place(
     mut words: Vec<String>,
-    replace_map: &HashMap<String, String>,
+    replacement_map: &HashMap<String, String>,
 ) -> Vec<String> {
     for word in words.iter_mut() {
-        if let Some(new_word) = replace_map.get(word) {
+        if let Some(new_word) = replacement_map.get(word) {
             *word = new_word.to_string();
         }
     }
