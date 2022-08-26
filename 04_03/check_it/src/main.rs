@@ -9,8 +9,10 @@ fn get_words(text: &str) -> Vec<String> {
 fn word_count(words: &Vec<String>) -> HashMap<String, i32> {
     let mut hashmap = HashMap::new();
     for word in words {
-        let count = hashmap.entry(word.to_lowercase()).or_insert(0);
-        *count += 1
+        hashmap
+            .entry(word.to_lowercase())
+            .and_modify(|count| *count += 1)
+            .or_insert(1);
     }
     hashmap
 }

@@ -19,8 +19,10 @@ fn word_count(lines: &Vec<Vec<String>>) -> HashMap<String, i32> {
     let mut hashmap = HashMap::new();
     for line in lines {
         for word in line {
-            let count = hashmap.entry(word.to_string()).or_insert(0);
-            *count += 1
+            hashmap
+                .entry(word.to_string())
+                .and_modify(|count| *count += 1)
+                .or_insert(1);
         }
     }
 
