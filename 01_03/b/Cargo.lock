@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "check_it"
+name = "b"
 version = "0.1.0"
